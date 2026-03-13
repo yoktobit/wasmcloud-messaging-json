@@ -1,0 +1,5 @@
+package hello:welt;
+
+world hello {
+    import wasmcloud:messaging/consumer@0.2.0;
+}
