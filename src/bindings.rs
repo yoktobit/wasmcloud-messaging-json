@@ -387,21 +387,6 @@ mod _rt {
     pub use alloc_crate::alloc;
 }
 
-#[cfg(target_arch = "wasm32")]
-#[unsafe(link_section = "component-type:wit-bindgen:0.53.1:hello:welt:hello:encoded world")]
-#[doc(hidden)]
-#[allow(clippy::octal_escapes)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 410] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x9e\x02\x01A\x02\x01\
-A\x05\x01B\x04\x01p}\x01ks\x01r\x03\x07subjects\x04body\0\x08reply-to\x01\x04\0\x0e\
-broker-message\x03\0\x02\x03\0\x1fwasmcloud:messaging/types@0.2.0\x05\0\x02\x03\0\
-\0\x0ebroker-message\x01B\x09\x02\x03\x02\x01\x01\x04\0\x0ebroker-message\x03\0\0\
-\x01p}\x01j\x01\x01\x01s\x01@\x03\x07subjects\x04body\x02\x0atimeout-msy\0\x03\x04\
-\0\x07request\x01\x04\x01j\0\x01s\x01@\x01\x03msg\x01\0\x05\x04\0\x07publish\x01\
-\x06\x03\0\"wasmcloud:messaging/consumer@0.2.0\x05\x02\x04\0\x10hello:welt/hello\
-\x04\0\x0b\x0b\x01\0\x05hello\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0d\
-wit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
-
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {
