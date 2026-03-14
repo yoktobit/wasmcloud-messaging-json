@@ -369,7 +369,22 @@ mod _rt {
             unsafe { core::hint::unreachable_unchecked() }
         }
     }
+
+    #[cfg(target_arch = "wasm32")]
+    pub fn run_ctors_once() {
+        wit_bindgen::rt::run_ctors_once();
+    }
+    pub unsafe fn cabi_dealloc(ptr: *mut u8, size: usize, align: usize) {
+        if size == 0 {
+            return;
+        }
+        unsafe {
+            let layout = alloc::Layout::from_size_align_unchecked(size, align);
+            alloc::dealloc(ptr, layout);
+        }
+    }
     extern crate alloc as alloc_crate;
+    pub use alloc_crate::alloc;
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -422,12 +437,6 @@ handle-message\x01\x03\x04\0!wasmcloud:messaging/handler@0.2.0\x05\x03\x04\0\x1d
 wasmcloud:template/task@0.1.0\x04\0\x0b\x0a\x01\0\x04task\x03\0\0\0G\x09producer\
 s\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.5\
 3.1";
-
-#[inline(never)]
-#[doc(hidden)]
-pub fn __link_custom_section_describing_imports() {
-    wit_bindgen::rt::maybe_link_cabi_realloc();
-}
 
 #[allow(dead_code, clippy::all)]
 pub mod exports {
