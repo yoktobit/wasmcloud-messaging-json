@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 use crate::bindings::wasmcloud::messaging::{consumer, types::BrokerMessage};
 
-mod bindings;
+pub mod bindings;
 
 pub fn request<T: Serialize, U: for<'a> Deserialize<'a>>(
     subject: &str,
