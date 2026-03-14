@@ -2,274 +2,374 @@
 // Options used:
 #[allow(dead_code, clippy::all)]
 pub mod wasmcloud {
-  pub mod messaging {
-    /// Types common to message broker interactions
-    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-    pub mod types {
-      #[used]
-      #[doc(hidden)]
-      static __FORCE_SECTION_REF: fn() =
-      super::super::super::__link_custom_section_describing_imports;
-      
-      use super::super::super::_rt;
-      /// A message sent to or received from a broker
-      #[derive(Clone)]
-      pub struct BrokerMessage {
-        pub subject: _rt::String,
-        pub body: _rt::Vec::<u8>,
-        pub reply_to: Option<_rt::String>,
-      }
-      impl ::core::fmt::Debug for BrokerMessage {
-        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          f.debug_struct("BrokerMessage").field("subject", &self.subject).field("body", &self.body).field("reply-to", &self.reply_to).finish()
-        }
-      }
+    pub mod messaging {
+        /// Types common to message broker interactions
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod types {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
 
-    }
-
-
-    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-    pub mod consumer {
-      #[used]
-      #[doc(hidden)]
-      static __FORCE_SECTION_REF: fn() =
-      super::super::super::__link_custom_section_describing_imports;
-      
-      use super::super::super::_rt;
-      pub type BrokerMessage = super::super::super::wasmcloud::messaging::types::BrokerMessage;
-      #[allow(unused_unsafe, clippy::all)]
-      /// Perform a request operation on a subject
-      #[allow(async_fn_in_trait)]
-      pub fn request(subject: &str,body: &[u8],timeout_ms: u32,) -> Result<BrokerMessage,_rt::String>{
-        unsafe {
-
-          #[cfg_attr(target_pointer_width="64", repr(align(8)))]
-          #[cfg_attr(target_pointer_width="32", repr(align(4)))]
-          struct RetArea([::core::mem::MaybeUninit::<u8>; 8*::core::mem::size_of::<*const u8>()]);
-          let mut ret_area = RetArea([::core::mem::MaybeUninit::uninit(); 8*::core::mem::size_of::<*const u8>()]);
-          let vec0 = subject;
-          let ptr0 = vec0.as_ptr().cast::<u8>();
-          let len0 = vec0.len();
-          let vec1 = body;
-          let ptr1 = vec1.as_ptr().cast::<u8>();
-          let len1 = vec1.len();
-          let ptr2 = ret_area.0.as_mut_ptr().cast::<u8>();
-          #[cfg(target_arch = "wasm32")]
-          #[link(wasm_import_module = "wasmcloud:messaging/consumer@0.2.0")]
-          unsafe extern "C" {
-            #[link_name = "request"]
-            fn wit_import3(_: *mut u8, _: usize, _: *mut u8, _: usize, _: i32, _: *mut u8, );
-          }
-
-          #[cfg(not(target_arch = "wasm32"))]
-          unsafe extern "C" fn wit_import3(_: *mut u8, _: usize, _: *mut u8, _: usize, _: i32, _: *mut u8, ) { unreachable!() }
-          wit_import3(ptr0.cast_mut(), len0, ptr1.cast_mut(), len1, _rt::as_i32(&timeout_ms), ptr2);
-          let l4 = i32::from(*ptr2.add(0).cast::<u8>());
-          let result18 = match l4 {
-            0 => {
-              let e = {
-                let l5 = *ptr2.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                let l6 = *ptr2.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                let len7 = l6;
-                let bytes7 = _rt::Vec::from_raw_parts(l5.cast(), len7, len7);
-                let l8 = *ptr2.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                let l9 = *ptr2.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                let len10 = l9;
-                let l11 = i32::from(*ptr2.add(5*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                super::super::super::wasmcloud::messaging::types::BrokerMessage{
-                  subject: _rt::string_lift(bytes7),
-                  body: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(l8.cast(), len10, len10)),
-                  reply_to: match l11 {
-                    0 => None,
-                    1 => {
-                      let e = {
-                        let l12 = *ptr2.add(6*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                        let l13 = *ptr2.add(7*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                        let len14 = l13;
-                        let bytes14 = _rt::Vec::from_raw_parts(l12.cast(), len14, len14);
-
-                        _rt::string_lift(bytes14)
-                      };
-                      Some(e)
-                    }
-                    _ => _rt::invalid_enum_discriminant(),
-                  },
+            use super::super::super::_rt;
+            /// A message sent to or received from a broker
+            #[derive(Clone)]
+            pub struct BrokerMessage {
+                pub subject: _rt::String,
+                pub body: _rt::Vec<u8>,
+                pub reply_to: Option<_rt::String>,
+            }
+            impl ::core::fmt::Debug for BrokerMessage {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                    f.debug_struct("BrokerMessage")
+                        .field("subject", &self.subject)
+                        .field("body", &self.body)
+                        .field("reply-to", &self.reply_to)
+                        .finish()
                 }
-              };
-              Ok(e)
             }
-            1 => {
-              let e = {
-                let l15 = *ptr2.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                let l16 = *ptr2.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                let len17 = l16;
-                let bytes17 = _rt::Vec::from_raw_parts(l15.cast(), len17, len17);
-
-                _rt::string_lift(bytes17)
-              };
-              Err(e)
-            }
-            _ => _rt::invalid_enum_discriminant(),
-          };
-          result18
         }
-      }
-      #[allow(unused_unsafe, clippy::all)]
-      /// Publish a message to a subject without awaiting a response
-      #[allow(async_fn_in_trait)]
-      pub fn publish(msg: &BrokerMessage,) -> Result<(),_rt::String>{
-        unsafe {
 
-          #[cfg_attr(target_pointer_width="64", repr(align(8)))]
-          #[cfg_attr(target_pointer_width="32", repr(align(4)))]
-          struct RetArea([::core::mem::MaybeUninit::<u8>; 3*::core::mem::size_of::<*const u8>()]);
-          let mut ret_area = RetArea([::core::mem::MaybeUninit::uninit(); 3*::core::mem::size_of::<*const u8>()]);
-          let super::super::super::wasmcloud::messaging::types::BrokerMessage{ subject:subject0, body:body0, reply_to:reply_to0, } = msg;
-          let vec1 = subject0;
-          let ptr1 = vec1.as_ptr().cast::<u8>();
-          let len1 = vec1.len();
-          let vec2 = body0;
-          let ptr2 = vec2.as_ptr().cast::<u8>();
-          let len2 = vec2.len();
-          let (result4_0,result4_1,result4_2,) = match reply_to0 {
-            Some(e) => {
-              let vec3 = e;
-              let ptr3 = vec3.as_ptr().cast::<u8>();
-              let len3 = vec3.len();
+        #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+        pub mod consumer {
+            #[used]
+            #[doc(hidden)]
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
 
-              (1i32, ptr3.cast_mut(), len3)
-            },
-            None => {
-              (0i32, ::core::ptr::null_mut(), 0usize)
-            },
-          };let ptr5 = ret_area.0.as_mut_ptr().cast::<u8>();
-          #[cfg(target_arch = "wasm32")]
-          #[link(wasm_import_module = "wasmcloud:messaging/consumer@0.2.0")]
-          unsafe extern "C" {
-            #[link_name = "publish"]
-            fn wit_import6(_: *mut u8, _: usize, _: *mut u8, _: usize, _: i32, _: *mut u8, _: usize, _: *mut u8, );
-          }
+            use super::super::super::_rt;
+            pub type BrokerMessage =
+                super::super::super::wasmcloud::messaging::types::BrokerMessage;
+            #[allow(unused_unsafe, clippy::all)]
+            /// Perform a request operation on a subject
+            #[allow(async_fn_in_trait)]
+            pub fn request(
+                subject: &str,
+                body: &[u8],
+                timeout_ms: u32,
+            ) -> Result<BrokerMessage, _rt::String> {
+                unsafe {
+                    #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
+                    #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
+                    struct RetArea(
+                        [::core::mem::MaybeUninit<u8>; 8 * ::core::mem::size_of::<*const u8>()],
+                    );
+                    let mut ret_area = RetArea(
+                        [::core::mem::MaybeUninit::uninit();
+                            8 * ::core::mem::size_of::<*const u8>()],
+                    );
+                    let vec0 = subject;
+                    let ptr0 = vec0.as_ptr().cast::<u8>();
+                    let len0 = vec0.len();
+                    let vec1 = body;
+                    let ptr1 = vec1.as_ptr().cast::<u8>();
+                    let len1 = vec1.len();
+                    let ptr2 = ret_area.0.as_mut_ptr().cast::<u8>();
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "wasmcloud:messaging/consumer@0.2.0")]
+                    unsafe extern "C" {
+                        #[link_name = "request"]
+                        fn wit_import3(
+                            _: *mut u8,
+                            _: usize,
+                            _: *mut u8,
+                            _: usize,
+                            _: i32,
+                            _: *mut u8,
+                        );
+                    }
 
-          #[cfg(not(target_arch = "wasm32"))]
-          unsafe extern "C" fn wit_import6(_: *mut u8, _: usize, _: *mut u8, _: usize, _: i32, _: *mut u8, _: usize, _: *mut u8, ) { unreachable!() }
-          wit_import6(ptr1.cast_mut(), len1, ptr2.cast_mut(), len2, result4_0, result4_1, result4_2, ptr5);
-          let l7 = i32::from(*ptr5.add(0).cast::<u8>());
-          let result11 = match l7 {
-            0 => {
-              let e = ();
-              Ok(e)
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn wit_import3(
+                        _: *mut u8,
+                        _: usize,
+                        _: *mut u8,
+                        _: usize,
+                        _: i32,
+                        _: *mut u8,
+                    ) {
+                        unreachable!()
+                    }
+                    wit_import3(
+                        ptr0.cast_mut(),
+                        len0,
+                        ptr1.cast_mut(),
+                        len1,
+                        _rt::as_i32(&timeout_ms),
+                        ptr2,
+                    );
+                    let l4 = i32::from(*ptr2.add(0).cast::<u8>());
+                    let result18 = match l4 {
+                        0 => {
+                            let e = {
+                                let l5 = *ptr2
+                                    .add(::core::mem::size_of::<*const u8>())
+                                    .cast::<*mut u8>();
+                                let l6 = *ptr2
+                                    .add(2 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<usize>();
+                                let len7 = l6;
+                                let bytes7 = _rt::Vec::from_raw_parts(l5.cast(), len7, len7);
+                                let l8 = *ptr2
+                                    .add(3 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<*mut u8>();
+                                let l9 = *ptr2
+                                    .add(4 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<usize>();
+                                let len10 = l9;
+                                let l11 = i32::from(
+                                    *ptr2
+                                        .add(5 * ::core::mem::size_of::<*const u8>())
+                                        .cast::<u8>(),
+                                );
+
+                                super::super::super::wasmcloud::messaging::types::BrokerMessage {
+                                    subject: _rt::string_lift(bytes7),
+                                    body: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(
+                                        l8.cast(),
+                                        len10,
+                                        len10,
+                                    )),
+                                    reply_to: match l11 {
+                                        0 => None,
+                                        1 => {
+                                            let e = {
+                                                let l12 = *ptr2
+                                                    .add(6 * ::core::mem::size_of::<*const u8>())
+                                                    .cast::<*mut u8>();
+                                                let l13 = *ptr2
+                                                    .add(7 * ::core::mem::size_of::<*const u8>())
+                                                    .cast::<usize>();
+                                                let len14 = l13;
+                                                let bytes14 = _rt::Vec::from_raw_parts(
+                                                    l12.cast(),
+                                                    len14,
+                                                    len14,
+                                                );
+
+                                                _rt::string_lift(bytes14)
+                                            };
+                                            Some(e)
+                                        }
+                                        _ => _rt::invalid_enum_discriminant(),
+                                    },
+                                }
+                            };
+                            Ok(e)
+                        }
+                        1 => {
+                            let e = {
+                                let l15 = *ptr2
+                                    .add(::core::mem::size_of::<*const u8>())
+                                    .cast::<*mut u8>();
+                                let l16 = *ptr2
+                                    .add(2 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<usize>();
+                                let len17 = l16;
+                                let bytes17 = _rt::Vec::from_raw_parts(l15.cast(), len17, len17);
+
+                                _rt::string_lift(bytes17)
+                            };
+                            Err(e)
+                        }
+                        _ => _rt::invalid_enum_discriminant(),
+                    };
+                    result18
+                }
             }
-            1 => {
-              let e = {
-                let l8 = *ptr5.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                let l9 = *ptr5.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                let len10 = l9;
-                let bytes10 = _rt::Vec::from_raw_parts(l8.cast(), len10, len10);
+            #[allow(unused_unsafe, clippy::all)]
+            /// Publish a message to a subject without awaiting a response
+            #[allow(async_fn_in_trait)]
+            pub fn publish(msg: &BrokerMessage) -> Result<(), _rt::String> {
+                unsafe {
+                    #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
+                    #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
+                    struct RetArea(
+                        [::core::mem::MaybeUninit<u8>; 3 * ::core::mem::size_of::<*const u8>()],
+                    );
+                    let mut ret_area = RetArea(
+                        [::core::mem::MaybeUninit::uninit();
+                            3 * ::core::mem::size_of::<*const u8>()],
+                    );
+                    let super::super::super::wasmcloud::messaging::types::BrokerMessage {
+                        subject: subject0,
+                        body: body0,
+                        reply_to: reply_to0,
+                    } = msg;
+                    let vec1 = subject0;
+                    let ptr1 = vec1.as_ptr().cast::<u8>();
+                    let len1 = vec1.len();
+                    let vec2 = body0;
+                    let ptr2 = vec2.as_ptr().cast::<u8>();
+                    let len2 = vec2.len();
+                    let (result4_0, result4_1, result4_2) = match reply_to0 {
+                        Some(e) => {
+                            let vec3 = e;
+                            let ptr3 = vec3.as_ptr().cast::<u8>();
+                            let len3 = vec3.len();
 
-                _rt::string_lift(bytes10)
-              };
-              Err(e)
+                            (1i32, ptr3.cast_mut(), len3)
+                        }
+                        None => (0i32, ::core::ptr::null_mut(), 0usize),
+                    };
+                    let ptr5 = ret_area.0.as_mut_ptr().cast::<u8>();
+                    #[cfg(target_arch = "wasm32")]
+                    #[link(wasm_import_module = "wasmcloud:messaging/consumer@0.2.0")]
+                    unsafe extern "C" {
+                        #[link_name = "publish"]
+                        fn wit_import6(
+                            _: *mut u8,
+                            _: usize,
+                            _: *mut u8,
+                            _: usize,
+                            _: i32,
+                            _: *mut u8,
+                            _: usize,
+                            _: *mut u8,
+                        );
+                    }
+
+                    #[cfg(not(target_arch = "wasm32"))]
+                    unsafe extern "C" fn wit_import6(
+                        _: *mut u8,
+                        _: usize,
+                        _: *mut u8,
+                        _: usize,
+                        _: i32,
+                        _: *mut u8,
+                        _: usize,
+                        _: *mut u8,
+                    ) {
+                        unreachable!()
+                    }
+                    wit_import6(
+                        ptr1.cast_mut(),
+                        len1,
+                        ptr2.cast_mut(),
+                        len2,
+                        result4_0,
+                        result4_1,
+                        result4_2,
+                        ptr5,
+                    );
+                    let l7 = i32::from(*ptr5.add(0).cast::<u8>());
+                    let result11 = match l7 {
+                        0 => {
+                            let e = ();
+                            Ok(e)
+                        }
+                        1 => {
+                            let e = {
+                                let l8 = *ptr5
+                                    .add(::core::mem::size_of::<*const u8>())
+                                    .cast::<*mut u8>();
+                                let l9 = *ptr5
+                                    .add(2 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<usize>();
+                                let len10 = l9;
+                                let bytes10 = _rt::Vec::from_raw_parts(l8.cast(), len10, len10);
+
+                                _rt::string_lift(bytes10)
+                            };
+                            Err(e)
+                        }
+                        _ => _rt::invalid_enum_discriminant(),
+                    };
+                    result11
+                }
             }
-            _ => _rt::invalid_enum_discriminant(),
-          };
-          result11
         }
-      }
-
     }
-
-  }
 }
 mod _rt {
-  #![allow(dead_code, unused_imports, clippy::all)]
-  pub use alloc_crate::string::String;
-  pub use alloc_crate::vec::Vec;
+    #![allow(dead_code, unused_imports, clippy::all)]
+    pub use alloc_crate::string::String;
+    pub use alloc_crate::vec::Vec;
 
-  pub fn as_i32<T: AsI32>(t: T) -> i32 {
-    t.as_i32()
-  }
+    pub fn as_i32<T: AsI32>(t: T) -> i32 {
+        t.as_i32()
+    }
 
-  pub trait AsI32 {
-    fn as_i32(self) -> i32;
-  }
+    pub trait AsI32 {
+        fn as_i32(self) -> i32;
+    }
 
-  impl<'a, T: Copy + AsI32> AsI32 for &'a T {
-    fn as_i32(self) -> i32 {
-      (*self).as_i32()
+    impl<'a, T: Copy + AsI32> AsI32 for &'a T {
+        fn as_i32(self) -> i32 {
+            (*self).as_i32()
+        }
     }
-  }
-  
-  impl AsI32 for i32 {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for i32 {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for u32 {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for u32 {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for i16 {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for i16 {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for u16 {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for u16 {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for i8 {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for i8 {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for u8 {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for u8 {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for char {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for char {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  
-  impl AsI32 for usize {
-    #[inline]
-    fn as_i32(self) -> i32 {
-      self as i32
+
+    impl AsI32 for usize {
+        #[inline]
+        fn as_i32(self) -> i32 {
+            self as i32
+        }
     }
-  }
-  pub unsafe fn string_lift(bytes: Vec<u8>) -> String {
-    if cfg!(debug_assertions) {
-      String::from_utf8(bytes).unwrap()
-    } else {
-      unsafe { String::from_utf8_unchecked(bytes) }
+    pub unsafe fn string_lift(bytes: Vec<u8>) -> String {
+        if cfg!(debug_assertions) {
+            String::from_utf8(bytes).unwrap()
+        } else {
+            unsafe { String::from_utf8_unchecked(bytes) }
+        }
     }
-  }
-  pub unsafe fn invalid_enum_discriminant<T>() -> T {
-    if cfg!(debug_assertions) {
-      panic!("invalid enum discriminant")
-    } else {
-      unsafe { core::hint::unreachable_unchecked() }
+    pub unsafe fn invalid_enum_discriminant<T>() -> T {
+        if cfg!(debug_assertions) {
+            panic!("invalid enum discriminant")
+        } else {
+            unsafe { core::hint::unreachable_unchecked() }
+        }
     }
-  }
-  extern crate alloc as alloc_crate;
+    extern crate alloc as alloc_crate;
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -290,6 +390,169 @@ wit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {
-  wit_bindgen::rt::maybe_link_cabi_realloc();
+    wit_bindgen::rt::maybe_link_cabi_realloc();
 }
 
+#[allow(unused_macros)]
+#[doc(hidden)]
+
+macro_rules! __export_task_impl {
+  ($ty:ident) => (self::export!($ty with_types_in self););
+  ($ty:ident with_types_in $($path_to_types_root:tt)*) => (
+  $($path_to_types_root)*::exports::wasmcloud::messaging::handler::__export_wasmcloud_messaging_handler_0_2_0_cabi!($ty with_types_in $($path_to_types_root)*::exports::wasmcloud::messaging::handler);
+  )
+}
+#[doc(inline)]
+pub(crate) use __export_task_impl as export;
+
+#[cfg(target_arch = "wasm32")]
+#[unsafe(link_section = "component-type:wit-bindgen:0.53.1:wasmcloud:template@0.1.0:task:encoded world")]
+#[doc(hidden)]
+#[allow(clippy::octal_escapes)]
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 522] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x8f\x03\x01A\x02\x01\
+A\x07\x01B\x04\x01p}\x01ks\x01r\x03\x07subjects\x04body\0\x08reply-to\x01\x04\0\x0e\
+broker-message\x03\0\x02\x03\0\x1fwasmcloud:messaging/types@0.2.0\x05\0\x02\x03\0\
+\0\x0ebroker-message\x01B\x09\x02\x03\x02\x01\x01\x04\0\x0ebroker-message\x03\0\0\
+\x01p}\x01j\x01\x01\x01s\x01@\x03\x07subjects\x04body\x02\x0atimeout-msy\0\x03\x04\
+\0\x07request\x01\x04\x01j\0\x01s\x01@\x01\x03msg\x01\0\x05\x04\0\x07publish\x01\
+\x06\x03\0\"wasmcloud:messaging/consumer@0.2.0\x05\x02\x01B\x05\x02\x03\x02\x01\x01\
+\x04\0\x0ebroker-message\x03\0\0\x01j\0\x01s\x01@\x01\x03msg\x01\0\x02\x04\0\x0e\
+handle-message\x01\x03\x04\0!wasmcloud:messaging/handler@0.2.0\x05\x03\x04\0\x1d\
+wasmcloud:template/task@0.1.0\x04\0\x0b\x0a\x01\0\x04task\x03\0\0\0G\x09producer\
+s\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.5\
+3.1";
+
+#[inline(never)]
+#[doc(hidden)]
+pub fn __link_custom_section_describing_imports() {
+    wit_bindgen::rt::maybe_link_cabi_realloc();
+}
+
+#[allow(dead_code, clippy::all)]
+pub mod exports {
+    pub mod wasmcloud {
+        pub mod messaging {
+
+            #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+            pub mod handler {
+                #[used]
+                #[doc(hidden)]
+                static __FORCE_SECTION_REF: fn() =
+                    super::super::super::super::__link_custom_section_describing_imports;
+
+                use super::super::super::super::_rt;
+                pub type BrokerMessage =
+                    super::super::super::super::wasmcloud::messaging::types::BrokerMessage;
+                #[doc(hidden)]
+                #[allow(non_snake_case, unused_unsafe)]
+                pub unsafe fn _export_handle_message_cabi<T_: Guest>(
+                    arg0: *mut u8,
+                    arg1: usize,
+                    arg2: *mut u8,
+                    arg3: usize,
+                    arg4: i32,
+                    arg5: *mut u8,
+                    arg6: usize,
+                ) -> *mut u8 {
+                    unsafe {
+                        #[cfg(target_arch = "wasm32")]
+                        _rt::run_ctors_once();
+                        let result3 = {
+                            let len0 = arg1;
+                            let bytes0 = _rt::Vec::from_raw_parts(arg0.cast(), len0, len0);
+                            let len1 = arg3;
+                            T_::handle_message(super::super::super::super::wasmcloud::messaging::types::BrokerMessage{
+            subject: _rt::string_lift(bytes0),
+            body: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(arg2.cast(), len1, len1)),
+            reply_to: match arg4 {
+              0 => None,
+              1 => {
+                let e = {
+                  let len2 = arg6;
+                  let bytes2 = _rt::Vec::from_raw_parts(arg5.cast(), len2, len2);
+
+                  _rt::string_lift(bytes2)
+                };
+                Some(e)
+              }
+              _ => _rt::invalid_enum_discriminant(),
+            },
+          })
+                        };
+                        let ptr4 = (&raw mut _RET_AREA.0).cast::<u8>();
+                        match result3 {
+                            Ok(_) => {
+                                *ptr4.add(0).cast::<u8>() = (0i32) as u8;
+                            }
+                            Err(e) => {
+                                *ptr4.add(0).cast::<u8>() = (1i32) as u8;
+                                let vec5 = (e.into_bytes()).into_boxed_slice();
+                                let ptr5 = vec5.as_ptr().cast::<u8>();
+                                let len5 = vec5.len();
+                                ::core::mem::forget(vec5);
+                                *ptr4
+                                    .add(2 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<usize>() = len5;
+                                *ptr4
+                                    .add(::core::mem::size_of::<*const u8>())
+                                    .cast::<*mut u8>() = ptr5.cast_mut();
+                            }
+                        };
+                        ptr4
+                    }
+                }
+                #[doc(hidden)]
+                #[allow(non_snake_case)]
+                pub unsafe fn __post_return_handle_message<T_: Guest>(arg0: *mut u8) {
+                    unsafe {
+                        let l0 = i32::from(*arg0.add(0).cast::<u8>());
+                        match l0 {
+                            0 => (),
+                            _ => {
+                                let l1 = *arg0
+                                    .add(::core::mem::size_of::<*const u8>())
+                                    .cast::<*mut u8>();
+                                let l2 = *arg0
+                                    .add(2 * ::core::mem::size_of::<*const u8>())
+                                    .cast::<usize>();
+                                _rt::cabi_dealloc(l1, l2, 1);
+                            }
+                        }
+                    }
+                }
+                pub trait Guest {
+                    /// Callback handled to invoke a function when a message is received from a subscription
+                    #[allow(async_fn_in_trait)]
+                    fn handle_message(msg: BrokerMessage) -> Result<(), _rt::String>;
+                }
+                #[doc(hidden)]
+
+                macro_rules! __export_wasmcloud_messaging_handler_0_2_0_cabi{
+        ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
+
+          #[unsafe(export_name = "wasmcloud:messaging/handler@0.2.0#handle-message")]
+          unsafe extern "C" fn export_handle_message(arg0: *mut u8,arg1: usize,arg2: *mut u8,arg3: usize,arg4: i32,arg5: *mut u8,arg6: usize,) -> *mut u8 {
+            unsafe { $($path_to_types)*::_export_handle_message_cabi::<$ty>(arg0, arg1, arg2, arg3, arg4, arg5, arg6) }
+          }
+          #[unsafe(export_name = "cabi_post_wasmcloud:messaging/handler@0.2.0#handle-message")]
+          unsafe extern "C" fn _post_return_handle_message(arg0: *mut u8,) {
+            unsafe { $($path_to_types)*::__post_return_handle_message::<$ty>(arg0) }
+          }
+        };);
+      }
+                #[doc(hidden)]
+                pub(crate) use __export_wasmcloud_messaging_handler_0_2_0_cabi;
+
+                #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
+                #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
+                struct _RetArea(
+                    [::core::mem::MaybeUninit<u8>; 3 * ::core::mem::size_of::<*const u8>()],
+                );
+                static mut _RET_AREA: _RetArea = _RetArea(
+                    [::core::mem::MaybeUninit::uninit(); 3 * ::core::mem::size_of::<*const u8>()],
+                );
+            }
+        }
+    }
+}
