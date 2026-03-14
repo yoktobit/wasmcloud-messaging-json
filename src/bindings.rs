@@ -395,15 +395,14 @@ pub fn __link_custom_section_describing_imports() {
 
 #[allow(unused_macros)]
 #[doc(hidden)]
+#[macro_export]
 
-macro_rules! __export_task_impl {
-  ($ty:ident) => (self::export!($ty with_types_in self););
+macro_rules! export {
+  ($ty:ident) => ( self::exports::wasmcloud::messaging::handler::__export_wasmcloud_messaging_handler_0_2_0_cabi!($ty with_types_in self::exports::wasmcloud::messaging::handler); );
   ($ty:ident with_types_in $($path_to_types_root:tt)*) => (
   $($path_to_types_root)*::exports::wasmcloud::messaging::handler::__export_wasmcloud_messaging_handler_0_2_0_cabi!($ty with_types_in $($path_to_types_root)*::exports::wasmcloud::messaging::handler);
   )
 }
-#[doc(inline)]
-pub(crate) use __export_task_impl as export;
 
 #[cfg(target_arch = "wasm32")]
 #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:wasmcloud:template@0.1.0:task:encoded world")]
