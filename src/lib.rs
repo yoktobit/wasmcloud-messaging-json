@@ -55,23 +55,21 @@ fn publish_json_reply<T: Serialize>(subject: &str, response: &T) -> Result<(), S
     consumer::publish(&reply)
 }
 
-pub fn handle_json_message<T, U, F>(msg: BrokerMessage, handler: F) -> Result<(), String>
+pub fn handle_json<T, U, F>(
+    body: &[u8],
+    reply_to: Option<String>,
+    handler: F,
+) -> Result<(String, Vec<u8>), String>
 where
     T: DeserializeOwned,
     U: Serialize,
     F: FnOnce(T) -> Result<U, String>,
 {
-    let Some(subject) = msg.reply_to else {
-        return Err("missing reply_to".to_string());
-    };
-    let request: T = serde_json::from_slice(msg.body.as_slice())
-        .map_err(|e| format!("Failed to decode JSON message: {}", e))?;
+    let subject = reply_to.ok_or_else(|| "missing reply_to".to_string())?;
+    let request: T =
+        serde_json::from_slice(body).map_err(|e| format!("Failed to decode JSON message: {e}"))?;
     let response = handler(request)?;
-    let body = serde_json::to_vec(&response)
-        .map_err(|e| format!("Failed to encode JSON response: {}", e))?;
-    consumer::publish(&BrokerMessage {
-        subject: subject.to_string(),
-        body: body.into(),
-        reply_to: None,
-    })
+    let response_body = serde_json::to_vec(&response)
+        .map_err(|e| format!("Failed to encode JSON response: {e}"))?;
+    Ok((subject, response_body))
 }
